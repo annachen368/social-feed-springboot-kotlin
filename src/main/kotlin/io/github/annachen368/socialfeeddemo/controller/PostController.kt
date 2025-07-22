@@ -1,13 +1,13 @@
 package io.github.annachen368.socialfeeddemo.controller
 
-import io.github.annachen368.socialfeeddemo.dto.CreatePostRequestDto
+import io.github.annachen368.socialfeeddemo.dto.CreatePostRequest
 import io.github.annachen368.socialfeeddemo.model.Post
 import io.github.annachen368.socialfeeddemo.repository.PostRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/v1/posts")
 class PostController(private val postRepo: PostRepository) {
 
     // Get all posts
@@ -16,10 +16,11 @@ class PostController(private val postRepo: PostRepository) {
 
     // Create a new post
     @PostMapping
-    fun createPost(@RequestBody request: CreatePostRequestDto): Post {
+    fun createPost(@RequestBody request: CreatePostRequest): Post {
         val post = Post(
             author = request.author,
-            content = request.content
+            content = request.content,
+            attachments = request.attachments
         )
         return postRepo.save(post)
     }
@@ -32,9 +33,9 @@ class PostController(private val postRepo: PostRepository) {
 
     // Update post
     @PutMapping("/{id}")
-    fun updatePost(@PathVariable id: Long, @RequestBody request: CreatePostRequestDto): ResponseEntity<Post> {
+    fun updatePost(@PathVariable id: Long, @RequestBody request: CreatePostRequest): ResponseEntity<Post> {
         val updated = postRepo.findById(id).map {
-            val post = it.copy(author = request.author, content = request.content)
+            val post = it.copy(author = request.author, content = request.content, attachments = request.attachments)
             ResponseEntity.ok(postRepo.save(post))
         }
         return updated.orElse(ResponseEntity.notFound().build())
