@@ -20,7 +20,7 @@ class PostController(private val postRepo: PostRepository) {
         val post = Post(
             author = request.author,
             content = request.content,
-            attachments = request.attachments
+            imageUrl = request.imageUrl
         )
         return postRepo.save(post)
     }
@@ -35,7 +35,7 @@ class PostController(private val postRepo: PostRepository) {
     @PutMapping("/{id}")
     fun updatePost(@PathVariable id: Long, @RequestBody request: CreatePostRequest): ResponseEntity<Post> {
         val updated = postRepo.findById(id).map {
-            val post = it.copy(author = request.author, content = request.content, attachments = request.attachments)
+            val post = it.copy(author = request.author, content = request.content, imageUrl = request.imageUrl)
             ResponseEntity.ok(postRepo.save(post))
         }
         return updated.orElse(ResponseEntity.notFound().build())

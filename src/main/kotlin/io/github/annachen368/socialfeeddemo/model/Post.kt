@@ -9,5 +9,5 @@ data class Post(
     val author: String,
     val content: String,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true) val attachments: List<Attachment>? = null
+    val imageUrl: String? = null,
 )
