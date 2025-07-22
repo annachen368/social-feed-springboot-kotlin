@@ -40,4 +40,14 @@ class PostController(private val postRepo: PostRepository) {
         return updated.orElse(ResponseEntity.notFound().build())
     }
 
+    // Delete post
+    @DeleteMapping("/{id}")
+    fun deletePost(@PathVariable id: Long): ResponseEntity<Void> {
+        return if (postRepo.existsById(id)) {
+            postRepo.deleteById(id)
+            ResponseEntity.noContent().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
+    }
 }
